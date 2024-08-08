@@ -1,0 +1,83 @@
+document.addEventListener("DOMContentLoaded", function() {
+    const loginForm = document.getElementById("loginForm");
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const balanceDiv = document.getElementById("balance");
+    const balanceAmount = document.getElementById("balanceAmount");
+    const transferDiv = document.getElementById("transfer");
+    const recipientInput = document.getElementById("recipient");
+    const amountInput = document.getElementById("amount");
+    const transferBtn = document.getElementById("transferBtn");
+    const logoutBtn = document.getElementById("logout");
+    const messageDiv = document.getElementById("message");
+
+    let isLoggedIn = false;
+    let balance = 0;
+
+    loginForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+        const username = usernameInput.value;
+        const password = passwordInput.value;
+        // Perform authentication (dummy logic for demonstration)
+        if (username === "user" && password === "password") {
+            isLoggedIn = true;
+            showBalance();
+            showTransfer();
+            showMessage("success", "Login successful.");
+        } else {
+            showMessage("error", "Invalid username or password.");
+        }
+    });
+
+    logoutBtn.addEventListener("click", function() {
+        isLoggedIn = false;
+        hideBalance();
+        hideTransfer();
+        showMessage("success", "Logged out successfully.");
+    });
+
+    transferBtn.addEventListener("click", function() {
+        const recipient = recipientInput.value;
+        const amount = parseFloat(amountInput.value);
+        // Perform money transfer (dummy logic for demonstration)
+        if (amount > 0 && balance >= amount) {
+            balance -= amount;
+            updateBalance();
+            showMessage("success", `Transferred $${amount} to ${recipient}.`);
+        } else {
+            showMessage("error", "Invalid transfer amount or insufficient balance.");
+        }
+    });
+
+    function showBalance() {
+        balanceDiv.classList.remove("hidden");
+        updateBalance();
+    }
+
+    function hideBalance() {
+        balanceDiv.classList.add("hidden");
+    }
+
+    function updateBalance() {
+        balanceAmount.textContent = `$${balance.toFixed(2)}`;
+    }
+
+    function showTransfer() {
+        transferDiv.classList.remove("hidden");
+    }
+
+    function hideTransfer() {
+        transferDiv.classList.add("hidden");
+    }
+
+    function showMessage(type, text) {
+        messageDiv.textContent = text;
+        messageDiv.className = "visible";
+        messageDiv.classList.add(type);
+        setTimeout(function() {
+            messageDiv.textContent = "";
+            messageDiv.classList.remove("visible");
+            messageDiv.className = "";
+        }, 3000);
+    }
+});
